@@ -26,27 +26,9 @@ class MainWindow(QMainWindow):
         if self.db.connectToDatabase(db_filename):
             self.setCurretFile(db_filename)
 
-            self.model = QSqlRelationalTableModel(db=self.db.getDb())
-            self.initWorkoutModel()
+            self.model = self.db.initWorkoutModel()
             self.ui.tableView.setModel(self.model)
             self.updateActions()
-
-    def initWorkoutModel(self):
-        self.model.setTable("workout")
-
-        self.model.setJoinMode(QSqlRelationalTableModel.JoinMode.LeftJoin)
-        self.model.setEditStrategy(QSqlRelationalTableModel.EditStrategy.OnManualSubmit)
-
-        self.model.setRelation(1, QSqlRelation("typew", "id", "name"))
-        self.model.relationModel(1).sort(1, Qt.SortOrder.AscendingOrder)
-
-        self.model.setHeaderData(0, Qt.Orientation.Horizontal, "id")
-        self.model.setHeaderData(1, Qt.Orientation.Horizontal, self.tr("Type"))
-        self.model.setHeaderData(2, Qt.Orientation.Horizontal, self.tr("Distance"))
-        self.model.setHeaderData(3, Qt.Orientation.Horizontal, self.tr("Note"))
-
-        self.model.select()
-        print(self.model.rowCount())
 
     def readSettings(self):
         settings = QSettings('workouts.ini', QSettings.Format.IniFormat)
@@ -70,7 +52,7 @@ class MainWindow(QMainWindow):
         QMessageBox.about(self, self.tr('About'),
                           '''<h2 align="center"><font color="#008000">workouts 1.0</font></h2>
 <p align="center"><font color="#000080" face="Times New Roman" size="4">
-<b>Gpx on map</b></font></p><p>{0}</p>
+<b>My rare workouts</b></font></p><p>{0}</p>
         '''.format(self.copyright))
 
     def aboutQt(self):

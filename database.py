@@ -20,7 +20,7 @@ class Database(QObject):
         if self.openDatabase(file_name):
             self.createTables()
         else:
-            print("Не удалось восстановить базу данных")
+            print("The database could not be restored.")
             result = False
         return result
 
@@ -45,3 +45,21 @@ class Database(QObject):
 
     def getDb(self):
         return self.db
+
+    def initWorkoutModel(self):
+        model = QSqlRelationalTableModel(db=self.db)
+        model.setTable("workout")
+
+        model.setJoinMode(QSqlRelationalTableModel.JoinMode.LeftJoin)
+        model.setEditStrategy(QSqlRelationalTableModel.EditStrategy.OnManualSubmit)
+
+        model.setRelation(1, QSqlRelation("typew", "id", "name"))
+        model.relationModel(1).sort(1, Qt.SortOrder.AscendingOrder)
+
+        model.setHeaderData(0, Qt.Orientation.Horizontal, "id")
+        model.setHeaderData(1, Qt.Orientation.Horizontal, self.tr("Type"))
+        model.setHeaderData(2, Qt.Orientation.Horizontal, self.tr("Distance"))
+        model.setHeaderData(3, Qt.Orientation.Horizontal, self.tr("Note"))
+
+        model.select()
+        return model
