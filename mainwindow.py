@@ -1,10 +1,16 @@
-from PyQt6.QtCore import QSettings
+from PyQt6.QtCore import Qt, QSettings
 from PyQt6.QtWidgets import QMainWindow, QMessageBox
+from PyQt6.QtSql import QSqlRelationalTableModel, QSqlRelation
 
 import ui_mainwindow
 
+from database import Database
+
+db_filename = "./workouts.sl3"
+
 
 class MainWindow(QMainWindow):
+
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
         self.ui = ui_mainwindow.Ui_MainWindow()
@@ -16,6 +22,31 @@ class MainWindow(QMainWindow):
         self.ui.actionAbout_Qt.triggered.connect(self.aboutQt)
 
         self.copyright = '<p><span style="font-size:10pt; color:#000055;">Copyright &copy; 2023 big-pond (George)</span></p>'
+        self.db = Database()
+        if self.db.connectToDatabase(db_filename):
+            self.setCurretFile(db_filename)
+
+            self.model = QSqlRelationalTableModel(db=self.db.getDb())
+            self.initWorkoutModel()
+            self.ui.tableView.setModel(self.model)
+            self.updateActions()
+
+    def initWorkoutModel(self):
+        self.model.setTable("workout")
+
+        self.model.setJoinMode(QSqlRelationalTableModel.JoinMode.LeftJoin)
+        self.model.setEditStrategy(QSqlRelationalTableModel.EditStrategy.OnManualSubmit)
+
+        self.model.setRelation(1, QSqlRelation("typew", "id", "name"))
+        self.model.relationModel(1).sort(1, Qt.SortOrder.AscendingOrder)
+
+        self.model.setHeaderData(0, Qt.Orientation.Horizontal, "id")
+        self.model.setHeaderData(1, Qt.Orientation.Horizontal, self.tr("Type"))
+        self.model.setHeaderData(2, Qt.Orientation.Horizontal, self.tr("Distance"))
+        self.model.setHeaderData(3, Qt.Orientation.Horizontal, self.tr("Note"))
+
+        self.model.select()
+        print(self.model.rowCount())
 
     def readSettings(self):
         settings = QSettings('workouts.ini', QSettings.Format.IniFormat)
@@ -44,3 +75,10 @@ class MainWindow(QMainWindow):
 
     def aboutQt(self):
         QMessageBox.aboutQt(self)
+
+    def setCurretFile(self, file_name):
+        # db_filename = file_name
+        self.setWindowTitle(db_filename)
+
+    def updateActions(self):
+        pass
