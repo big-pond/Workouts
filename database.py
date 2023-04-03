@@ -58,8 +58,10 @@ class Database(QObject):
 
         model.setHeaderData(0, Qt.Orientation.Horizontal, "id")
         model.setHeaderData(1, Qt.Orientation.Horizontal, self.tr("Type"))
-        model.setHeaderData(2, Qt.Orientation.Horizontal, self.tr("Distance"))
-        model.setHeaderData(3, Qt.Orientation.Horizontal, self.tr("Note"))
+        model.setHeaderData(2, Qt.Orientation.Horizontal, self.tr("Date"))
+        model.setHeaderData(3, Qt.Orientation.Horizontal, self.tr("Distance"))
+        model.setHeaderData(4, Qt.Orientation.Horizontal, self.tr("Note"))
 
         model.select()
         return model
+

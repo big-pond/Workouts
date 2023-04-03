@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt, QSettings
-from PyQt6.QtWidgets import QMainWindow, QMessageBox
+from PyQt6.QtWidgets import QMainWindow, QMessageBox, QToolBar
 from PyQt6.QtSql import QSqlRelationalTableModel, QSqlRelation
 
 import ui_mainwindow
@@ -16,7 +16,18 @@ class MainWindow(QMainWindow):
         self.ui = ui_mainwindow.Ui_MainWindow()
         self.ui.setupUi(self)
 
+        mainToolBar = QToolBar("MainToolBar")
+        mainToolBar.addAction(self.ui.actionAddWorkout)
+        mainToolBar.addAction(self.ui.actionDeleteWorkout)
+        mainToolBar.addAction(self.ui.actionSubmit)
+        mainToolBar.addAction(self.ui.actionRevert)
+        self.addToolBar(mainToolBar)
+
         self.ui.actionQuit.triggered.connect(self.close)
+        self.ui.actionAddWorkout.triggered.connect(self.addWorkout)
+        self.ui.actionDeleteWorkout.triggered.connect(self.deleteWorkout)
+        self.ui.actionSubmit.triggered.connect(self.submit)
+        self.ui.actionRevert.triggered.connect(self.revert)
 
         self.ui.actionAbout.triggered.connect(self.about)
         self.ui.actionAbout_Qt.triggered.connect(self.aboutQt)
@@ -47,6 +58,18 @@ class MainWindow(QMainWindow):
         settings.setValue('geometry', self.saveGeometry())
         settings.setValue('windowState', self.saveState())
         settings.endGroup()
+
+    def addWorkout(self):
+        pass
+
+    def deleteWorkout(self):
+        pass
+
+    def submit(self):
+        pass
+
+    def revert(self):
+        pass
 
     def about(self):
         QMessageBox.about(self, self.tr('About'),
