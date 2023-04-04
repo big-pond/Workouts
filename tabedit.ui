@@ -90,6 +90,10 @@
       <property name="text">
        <string/>
       </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>resources/add.svg</normaloff>resources/add.svg</iconset>
+      </property>
      </widget>
      <widget class="QToolButton" name="tbDel">
       <property name="geometry">
@@ -105,6 +109,10 @@
       </property>
       <property name="text">
        <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>resources/delete.svg</normaloff>resources/delete.svg</iconset>
       </property>
      </widget>
      <widget class="QToolButton" name="tbSubmit">
@@ -137,6 +145,10 @@
       </property>
       <property name="text">
        <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>resources/revert.svg</normaloff>resources/revert.svg</iconset>
       </property>
      </widget>
     </widget>
