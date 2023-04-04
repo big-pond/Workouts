@@ -1,10 +1,11 @@
 from PyQt6.QtCore import Qt, QSettings
-from PyQt6.QtWidgets import QMainWindow, QMessageBox, QToolBar
+from PyQt6.QtWidgets import QMainWindow, QMessageBox, QToolBar, QLabel
 from PyQt6.QtSql import QSqlRelationalTableModel, QSqlRelation
 
 import ui_mainwindow
 
 from database import Database
+from tabedit import TabEdit
 
 db_filename = "./workouts.sl3"
 
@@ -28,11 +29,13 @@ class MainWindow(QMainWindow):
         self.ui.actionDeleteWorkout.triggered.connect(self.deleteWorkout)
         self.ui.actionSubmit.triggered.connect(self.submit)
         self.ui.actionRevert.triggered.connect(self.revert)
+        self.ui.actionWorkoutType.triggered.connect(self.workoutType)
 
         self.ui.actionAbout.triggered.connect(self.about)
         self.ui.actionAbout_Qt.triggered.connect(self.aboutQt)
 
         self.copyright = '<p><span style="font-size:10pt; color:#000055;">Copyright &copy; 2023 big-pond (George)</span></p>'
+        self.ui.statusbar.addWidget(QLabel(self.copyright))
         self.db = Database()
         if self.db.connectToDatabase(db_filename):
             self.setCurretFile(db_filename)
@@ -70,6 +73,12 @@ class MainWindow(QMainWindow):
 
     def revert(self):
         pass
+
+    def workoutType(self):
+        dlg = TabEdit()
+        model = self.db.initTypeModel()
+        dlg.setModel(model)
+        dlg.exec()
 
     def about(self):
         QMessageBox.about(self, self.tr('About'),

@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt, QObject, QFileInfo
-from PyQt6.QtSql import QSqlDatabase, QSqlQuery, QSqlRelationalTableModel, QSqlRelation
+from PyQt6.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel, QSqlRelationalTableModel, QSqlRelation
 
 
 class Database(QObject):
@@ -62,6 +62,14 @@ class Database(QObject):
         model.setHeaderData(3, Qt.Orientation.Horizontal, self.tr("Distance"))
         model.setHeaderData(4, Qt.Orientation.Horizontal, self.tr("Note"))
 
+        model.select()
+        return model
+
+    def initTypeModel(self):
+        model = QSqlTableModel(db=self.db)
+        model.setTable("typew")
+        model.setHeaderData(0, Qt.Orientation.Horizontal, "id")
+        model.setHeaderData(1, Qt.Orientation.Horizontal, self.tr("Name"))
         model.select()
         return model
 
