@@ -68,6 +68,7 @@ class Database(QObject):
     def initTypeModel(self):
         model = QSqlTableModel(db=self.db)
         model.setTable("typew")
+        model.setEditStrategy(QSqlTableModel.EditStrategy.OnManualSubmit)
         model.setHeaderData(0, Qt.Orientation.Horizontal, "id")
         model.setHeaderData(1, Qt.Orientation.Horizontal, self.tr("Name"))
         model.select()

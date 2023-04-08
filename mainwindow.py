@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, QSettings
+# from PyQt6.QtGui import
 from PyQt6.QtWidgets import QMainWindow, QMessageBox, QToolBar, QLabel
-from PyQt6.QtSql import QSqlRelationalTableModel, QSqlRelation
 
 import ui_mainwindow
 
@@ -18,6 +18,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         mainToolBar = QToolBar("MainToolBar")
+        mainToolBar.setObjectName('MainToolBar')
         mainToolBar.addAction(self.ui.actionAddWorkout)
         mainToolBar.addAction(self.ui.actionDeleteWorkout)
         mainToolBar.addAction(self.ui.actionSubmit)
@@ -43,16 +44,17 @@ class MainWindow(QMainWindow):
             self.model = self.db.initWorkoutModel()
             self.ui.tableView.setModel(self.model)
             self.updateActions()
+        self.readSettings()
+
+    def closeEvent(self, event):
+        self.writeSettings()
+        QMainWindow.closeEvent(self, event)
 
     def readSettings(self):
         settings = QSettings('workouts.ini', QSettings.Format.IniFormat)
         settings.beginGroup('MainWindow')
-        is_geometry = settings.contains("geometry")
-        if is_geometry:
-            self.restoreGeometry(settings.value('geometry', ''))
-        is_window_state = settings.contains("windowState")
-        if is_window_state:
-            self.restoreState(settings.value('windowState', ''))
+        self.restoreGeometry(settings.value('geometry', self.saveGeometry()))
+        self.restoreState(settings.value('windowState', self.saveState()))
         settings.endGroup()
 
     def writeSettings(self):
@@ -76,6 +78,7 @@ class MainWindow(QMainWindow):
 
     def workoutType(self):
         dlg = TabEdit()
+        dlg.setWindowTitle(self.tr('Workout types'))
         model = self.db.initTypeModel()
         dlg.setModel(model)
         dlg.exec()

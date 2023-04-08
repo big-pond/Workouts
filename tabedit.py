@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QDialog
+from PyQt6.QtCore import QSettings
 
 import ui_tabedit
 
@@ -9,11 +10,17 @@ class TabEdit(QDialog):
         super(QDialog, self).__init__()
         self.ui = ui_tabedit.Ui_TabEdit()
         self.ui.setupUi(self)
+        self.ui.tbFirst.clicked.connect(self.first)
+        self.ui.tbLast.clicked.connect(self.last)
         self.ui.tbAdd.clicked.connect(self.addRecord)
         self.ui.tbDel.clicked.connect(self.deleteRecord)
         self.ui.tbSubmit.clicked.connect(self.submit)
         self.ui.tbRevert.clicked.connect(self.revert)
+        self.readSettings()
 
+    def done(self, a0: int) -> None:
+        self.writeSettings()
+        QDialog.done(self, a0)
 
     def setModel(self, model):
         self.ui.tableView.setModel(model)
@@ -21,18 +28,42 @@ class TabEdit(QDialog):
     def isBookModelChanged(self):
         return self.ui.tableView.model.isDirty()
 
+    def first(self):
+        self.ui.tableView.setCurrentIndex(self.ui.tableView.model.index(0, 2))
+
+    def last(self):
+        model = self.ui.tableView.model()
+        row = model.rowCount()-1
+        self.ui.tableView.setCurrentIndex(model.index(row, 1))
+
     def addRecord(self):
-        success = self.ui.tableView.model.insertRow(self.ui.tableView.model.rowCount())
+        model = self.ui.tableView.model()
+        row = model.rowCount()
+        success = model.insertRow(row)
+        self.ui.tableView.setCurrentIndex(model.index(row, 1))
         return success
 
     def deleteRecord(self):
+        result = False
         index = self.ui.tableView.currentIndex()
         if index.isValid():
-            result = self.ui.tableView.model.removeRow(index.row())
+            result = self.ui.tableView.model().removeRow(index.row())
         return result
 
     def submit(self):
-        self.ui.tableView.model.submitAll()
+        self.ui.tableView.model().submitAll()
 
     def revert(self):
-        self.ui.tableView.model.revertAll()
+        self.ui.tableView.model().revertAll()
+
+    def readSettings(self):
+        settings = QSettings('workouts.ini', QSettings.Format.IniFormat)
+        settings.beginGroup('TabEdit')
+        self.restoreGeometry(settings.value('geometry', self.saveGeometry()))
+        settings.endGroup()
+
+    def writeSettings(self):
+        settings = QSettings('workouts.ini', QSettings.Format.IniFormat)
+        settings.beginGroup('TabEdit')
+        settings.setValue('geometry', self.saveGeometry())
+        settings.endGroup()

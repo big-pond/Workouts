@@ -49,7 +49,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QToolButton" name="toolButton">
+     <widget class="QToolButton" name="tbFirst">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -61,8 +61,18 @@
       <property name="text">
        <string/>
       </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>resources/first.svg</normaloff>resources/first.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
      </widget>
-     <widget class="QToolButton" name="toolButton_2">
+     <widget class="QToolButton" name="tbLast">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -73,6 +83,16 @@
       </property>
       <property name="text">
        <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>resources/last.svg</normaloff>resources/last.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
       </property>
      </widget>
      <widget class="QToolButton" name="tbAdd">
@@ -94,6 +114,12 @@
        <iconset>
         <normaloff>resources/add.svg</normaloff>resources/add.svg</iconset>
       </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
      </widget>
      <widget class="QToolButton" name="tbDel">
       <property name="geometry">
@@ -114,6 +140,12 @@
        <iconset>
         <normaloff>resources/delete.svg</normaloff>resources/delete.svg</iconset>
       </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
      </widget>
      <widget class="QToolButton" name="tbSubmit">
       <property name="geometry">
@@ -129,6 +161,16 @@
       </property>
       <property name="text">
        <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>resources/submit.svg</normaloff>resources/submit.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
       </property>
      </widget>
      <widget class="QToolButton" name="tbRevert">
@@ -149,6 +191,12 @@
       <property name="icon">
        <iconset>
         <normaloff>resources/revert.svg</normaloff>resources/revert.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
       </property>
      </widget>
     </widget>
