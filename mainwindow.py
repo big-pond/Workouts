@@ -1,6 +1,7 @@
 from PyQt6.QtCore import Qt, QSettings
 # from PyQt6.QtGui import
 from PyQt6.QtWidgets import QMainWindow, QMessageBox, QToolBar, QLabel
+from PyQt6.QtSql import QSqlRelationalDelegate
 
 import ui_mainwindow
 
@@ -43,6 +44,7 @@ class MainWindow(QMainWindow):
 
             self.model = self.db.initWorkoutModel()
             self.ui.tableView.setModel(self.model)
+            self.ui.tableView.setItemDelegate(QSqlRelationalDelegate(self.ui.tableView))
             self.updateActions()
         self.readSettings()
 
@@ -65,16 +67,23 @@ class MainWindow(QMainWindow):
         settings.endGroup()
 
     def addWorkout(self):
-        pass
+        row = self.model.rowCount()
+        success = self.model.insertRow(row)
+        self.ui.tableView.setCurrentIndex(self.model.index(row, 1))
+        return success
 
     def deleteWorkout(self):
-        pass
+        result = False
+        index = self.ui.tableView.currentIndex()
+        if index.isValid():
+            result = self.model.removeRow(index.row())
+        return result
 
     def submit(self):
-        pass
+        self.model.submitAll()
 
     def revert(self):
-        pass
+        self.model.revertAll()
 
     def workoutType(self):
         dlg = TabEdit()
