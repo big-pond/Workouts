@@ -45,6 +45,7 @@ class MainWindow(QMainWindow):
             self.model = self.db.initWorkoutModel()
             self.ui.tableView.setModel(self.model)
             self.ui.tableView.setItemDelegate(QSqlRelationalDelegate(self.ui.tableView))
+            self.ui.tableView.horizontalHeader().stretchLastSection()
             self.updateActions()
         self.readSettings()
 
