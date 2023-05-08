@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog, QMessageBox
 from PyQt6.QtCore import QSettings
 
 import ui_tabedit
@@ -7,7 +7,7 @@ import ui_tabedit
 class TabEdit(QDialog):
 
     def __init__(self, parent=None):
-        super(QDialog, self).__init__()
+        super(QDialog, self).__init__(parent)
         self.ui = ui_tabedit.Ui_TabEdit()
         self.ui.setupUi(self)
         self.ui.tbFirst.clicked.connect(self.first)
@@ -39,16 +39,15 @@ class TabEdit(QDialog):
     def addRecord(self):
         model = self.ui.tableView.model()
         row = model.rowCount()
-        success = model.insertRow(row)
+        model.insertRow(row)
         self.ui.tableView.setCurrentIndex(model.index(row, 1))
-        return success
 
     def deleteRecord(self):
-        result = False
         index = self.ui.tableView.currentIndex()
         if index.isValid():
-            result = self.ui.tableView.model().removeRow(index.row())
-        return result
+            self.ui.tableView.model().removeRow(index.row())
+        else:
+            QMessageBox.information(self, '', 'Record not delected.')
 
     def submit(self):
         self.ui.tableView.model().submitAll()
