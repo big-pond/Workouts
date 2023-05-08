@@ -47,7 +47,7 @@ class TabEdit(QDialog):
         if index.isValid():
             self.ui.tableView.model().removeRow(index.row())
         else:
-            QMessageBox.information(self, '', 'Record not delected.')
+            QMessageBox.information(self, '', 'Record not selected.')
 
     def submit(self):
         self.ui.tableView.model().submitAll()
