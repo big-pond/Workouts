@@ -43,9 +43,13 @@ class MainWindow(QMainWindow):
             self.setCurretFile(db_filename)
 
             self.model = self.db.initWorkoutModel()
+            self.model.dataChanged.connect(self.updateActions)
             self.ui.tableView.setModel(self.model)
             self.ui.tableView.setItemDelegate(QSqlRelationalDelegate(self.ui.tableView))
             self.ui.tableView.horizontalHeader().stretchLastSection()
+            while self.model.canFetchMore():
+                self.model.fetchMore()
+            self.ui.tableView.setCurrentIndex(self.model.index(self.model.rowCount()-1, 1))
             self.updateActions()
         self.readSettings()
 
@@ -71,6 +75,7 @@ class MainWindow(QMainWindow):
         row = self.model.rowCount()
         success = self.model.insertRow(row)
         self.ui.tableView.setCurrentIndex(self.model.index(row, 1))
+        self.updateActions()
         return success
 
     def deleteWorkout(self):
@@ -78,6 +83,7 @@ class MainWindow(QMainWindow):
         index = self.ui.tableView.currentIndex()
         if index.isValid():
             result = self.model.removeRow(index.row())
+            self.updateActions()
         return result
 
     def submit(self):
@@ -108,4 +114,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(db_filename)
 
     def updateActions(self):
-        pass
+        dirty = self.model.isDirty()
+        self.ui.actionSubmit.setEnabled(dirty)
+        self.ui.actionRevert.setEnabled(dirty)
+
