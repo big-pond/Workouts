@@ -88,6 +88,10 @@ class MainWindow(QMainWindow):
 
     def submit(self):
         self.model.submitAll()
+        while self.model.canFetchMore():
+            self.model.fetchMore()
+        self.ui.tableView.setCurrentIndex(self.model.index(self.model.rowCount()-1, 1))
+        self.updateActions()
 
     def revert(self):
         self.model.revertAll()
